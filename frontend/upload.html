@@ -1,0 +1,115 @@
+<!--%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+body{
+    background-image: url("img/68232084_p0.png");
+    background-size: cover;
+}
+#app{
+    background-color:white;
+    text-align: center;
+    border:2px solid whitesmoke;
+    border-radius: 20px;
+    margin:0 auto;
+    margin-top:10%;
+    width:32%;
+    height:30em;
+}
+
+.el-upload-dragger{
+    margin-top: 10%;  
+    background-color: whitesmoke ;
+    border:1px solid lightgrey;
+}
+.el-upload-dragger:hover{
+    background-color: white ;
+    border:1px solid whitesmoke;
+    transition: 1s;
+}
+#upload_container{
+   height:23em;
+}
+#textzone{
+    height:1em;
+}
+#btnContainer{
+    padding-top: 1em;
+}
+.el-button:hover{
+    background-color: whitesmoke ;
+    border:1px solid lightgrey;
+    transition: 1s;
+}
+
+</style>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<title>欢迎进入角色与权限管理系统</title>
+</head>
+<body>
+<div id="app">
+	<el-upload
+	  id="upload_container"
+	  class="upload"
+	  ref="my-upload"
+	  :on-success="tiss"
+	  :on-error="errorfun"
+	  :auto-upload="false"
+	  
+	  :limit="1"
+	  drag
+	  action="/xbio-2.5.3/uploads"
+	  multiple>
+	  <i class="el-icon-upload"></i>
+	  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+	  <div class="el-upload__tip" slot="tip">请上传CSV文件</div>
+	</el-upload>
+	<div id="textzone">请上传合适的文件，不要瞎传。</div>
+	<div id="btnContainer">
+		<!--el-button id="resetBtn" class="btns" @click="reset">重置</el-button-->
+		<el-button id="submitBtn" class="btns" @click="submit">提交</el-button>	
+	</div>
+</div>
+
+<!-- <form action="http://192.168.2.61:8081/xbio-2.5.3/uploads" method="post" enctype="multipart/form-data" >
+    <input type="file" name="filename">
+    <input type="submit">
+</form> -->
+
+<script>
+    var vu = new Vue({
+    	el:"#app",
+    	data:{},
+    	methods:{
+			errorfun(err, file, fileList){
+				$("#textzone").css("color","red");
+				document.getElementById('textzone').innerHTML=("上传失败!(本地返回的信息)");
+				this.$refs['my-upload'].clearFiles();
+			},
+    		tiss(response, file, fileList){
+				if(response.status == "success"){
+					this.$refs['my-upload'].clearFiles();
+					document.getElementById('textzone').innerHTML=("您的 "+file.name+" "+response.msg+"!");
+
+				}else{
+					$("#textzone").css("color","red");
+					document.getElementById('textzone').innerHTML=("您的 "+file.name+" "+response.msg+"!");
+				}
+    		},
+			reset(){
+				this.$refs['my-upload'].clearFiles();
+			},
+			submit(){
+					this.$refs['my-upload'].submit();	
+			}
+    	}
+    });
+</script>
+</body>
+</html>
